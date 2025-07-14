@@ -1,6 +1,6 @@
-# 🧬 Complete Base Quality Score Recalibration (BQSR) Workflow: Before/After Quality Assessment using GATK
+# Complete Base Quality Score Recalibration (BQSR) Workflow: Before/After Quality Assessment using GATK
 
-### 🔍 Problem: Why Does Base Quality Drop After BQSR?
+### Why Does Base Quality Drop After BQSR?
 
 While working on a variant calling pipeline, many researchers observe that running **FastQC** on BAM files *after* applying GATK’s `BaseRecalibrator` (BQSR) shows a noticeable **drop in per-base quality scores** compared to the original BAM (e.g., after `SplitNCigarReads`).
 
@@ -8,15 +8,15 @@ While working on a variant calling pipeline, many researchers observe that runni
 
 ---
 
-### 🧠 What's Actually Happening?
+### What's Actually Happening?
 
 - **Before BQSR**: Modern sequencers (e.g., Illumina) often **overestimate** base quality scores.
 - **After BQSR**: Scores are recalibrated to reflect **true empirical accuracy**.
-- ✅ **Result**: The recalibrated scores may look "lower," but they are more **accurate and reliable** for downstream analysis like variant calling.
+- **Result**: The recalibrated scores may look "lower," but they are more **accurate and reliable** for downstream analysis like variant calling.
 
 ---
 
-### 📉 Why Does This Happen?
+### Why Does This Happen?
 
 1. **Illumina Quality Binning**  
    Most Illumina platforms bin quality scores into just 4 levels, which leads to coarser estimates.
@@ -29,7 +29,7 @@ While working on a variant calling pipeline, many researchers observe that runni
 
 ---
 
-## 📊 The Science Behind BQSR
+## The Science Behind BQSR
 
 ```
 EXAMPLE:
@@ -47,14 +47,14 @@ AFTER BQSR:  Reported Q27 → Actual error rate = 1 in 500
 
 ## 🧪 Pipeline Overview
 
-```bash
+```
 Original BAM ─▶ [BaseRecalibrator] ─▶ BEFORE.table
        │
        └────▶ [ApplyBQSR] ─▶ Recalibrated BAM ─▶ [BaseRecalibrator] ─▶ AFTER.table
                                                           │
                                                           ▼
                                          [AnalyzeCovariates] → Comparison Plots
-
+```
 
 ## 🧪 Workflow Overview
 
@@ -67,24 +67,29 @@ This SLURM-compatible script performs: Visualize the Effect of BQSR with a Compl
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Clone this repo
 
 ```bash
 git clone https://github.com/yourusername/bqsr-qc.git
 cd bqsr-qc
+```
 2. Edit 
-
+```
 scripts/bqsr_qc.sh
-
-Modify inside the script:
+```
+# Modify inside the script:
 ref_genome
 dbsnp, known_indels, gold_standard_indels, etc.
 original_bam
 sample_name
 
 3. Submit the job (SLURM)
-bash
+```bash
 sbatch bqsr_qc.sh
+```
+
+## Author
+Dr. Rezwanuzzaman Laskar
 
